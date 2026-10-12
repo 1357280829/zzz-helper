@@ -1,0 +1,51 @@
+/* The native controls remain available to import/sync code and integration tests. */
+select.ss-native{position:absolute!important;width:1px!important;height:1px!important;min-width:0!important;padding:0!important;border:0!important;clip-path:inset(50%);opacity:0;pointer-events:none;overflow:hidden}
+.ss-control{position:relative;display:inline-flex;vertical-align:middle;min-width:0;max-width:100%;color:inherit;font-size:inherit;line-height:inherit}
+.ss-control .ss-trigger{display:flex;align-items:center;gap:9px;width:100%;min-width:0;max-width:100%;padding:9px 12px;text-align:left;white-space:nowrap;background:#272b30;border:1px solid #41454d;border-radius:9px;color:#f3f3f4;font:inherit;grid-column:auto}
+.ss-control .ss-trigger:hover{background:#343941;border-color:#737b88}
+.ss-control .ss-trigger:focus-visible{outline:2px solid var(--accent,#f3a958);outline-offset:2px}
+.ss-control .ss-trigger[aria-expanded=true]{border-color:var(--accent,#f3a958);background:#352e27}
+.ss-current-icon{display:inline-flex;flex:0 0 auto}
+.ss-current-label{min-width:0;overflow:hidden;text-overflow:ellipsis;color:inherit}
+.ss-chevron{color:#adb1b7;margin-left:auto;padding-left:4px;flex:0 0 auto}
+.ss-icon{display:flex;align-items:center;justify-content:center;width:30px;height:30px;min-width:30px;flex:0 0 30px;border-radius:6px;background:#353b43;color:var(--accent,#f3a958);font-size:21px;line-height:1;overflow:hidden}
+.ss-icon img{display:block;width:100%;height:100%;object-fit:contain;object-position:center;background:transparent;border-radius:0}
+.ss-popup{position:fixed;z-index:1000;display:flex;flex-direction:column;gap:8px;padding:10px;background:#20242a;color:#f3f3f4;border:1px solid #687080;border-radius:12px;box-shadow:0 12px 40px #0009;min-height:100px;overflow:hidden;isolation:isolate}
+.ss-popup .ss-search{display:block;width:100%;flex:0 0 auto;min-width:0;font:inherit;font-size:17px;line-height:1.5;background:#14171c;border:1px solid #555d6a;border-radius:8px;padding:10px 12px;color:#f3f3f4}
+.ss-popup .ss-search:focus{outline:2px solid var(--accent,#f3a958);outline-offset:-1px}
+.ss-options{overflow-y:auto;overscroll-behavior:contain;min-height:36px;scrollbar-width:thin;scrollbar-color:#58616f #20242a}
+.ss-option{display:grid;grid-template-columns:30px minmax(0,1fr) 18px;gap:11px;align-items:center;min-height:48px;padding:8px 9px;border-radius:7px;cursor:pointer;font-size:17px;line-height:1.45;border:1px solid transparent}
+.ss-with-meta .ss-option{grid-template-columns:30px minmax(0,1fr) var(--ss-meta-width,152px) 18px}
+.ss-with-status .ss-option{grid-template-columns:30px minmax(0,1fr) 78px 18px}
+.ss-with-meta.ss-with-status .ss-option{grid-template-columns:30px minmax(0,1fr) var(--ss-meta-width,152px) 78px 18px}
+.ss-option:hover,.ss-option.ss-focused{background:#37322c;border-color:#796043}
+.ss-option[aria-selected=true]{color:var(--accent,#f3a958)}
+.ss-option[aria-disabled=true]{opacity:.4;cursor:default}
+.ss-option-label{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ss-option-meta{display:grid;grid-template-columns:repeat(var(--ss-meta-columns,1),minmax(0,1fr));gap:8px;min-width:0;color:#b4becb;font-size:15px}
+.ss-meta-part,.ss-option-status{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ss-option-status{color:#abb3bd;font-size:14px;text-align:right}
+.ss-option-status[data-status="已持有"],.ss-option-status[data-status="已同步"]{color:var(--green,#aad382)}
+.ss-check{justify-self:stretch;text-align:right;color:var(--accent,#f3a958)}
+.ss-group{color:#adb1b7;font-size:14px;line-height:1.5;padding:9px 10px 4px}
+.ss-group{position:sticky;top:0;z-index:1;background:#20242a;color:#f3c58d;border-bottom:1px solid #41454d;padding:6px 10px;font-weight:600}
+.ss-grouping{display:flex;gap:6px;flex:0 0 auto}
+.ss-grouping button{flex:1;padding:5px 9px;border:1px solid #41454d;border-radius:6px;background:#272b30;color:#bdc7d4;font-size:14px}
+.ss-grouping button[aria-pressed=true]{background:#3b3024;border-color:#977247;color:#ffd29a}
+.ss-empty{color:#adb1b7;text-align:center;padding:23px 10px;font-size:16px}
+.ss-help{flex:0 0 auto;font-size:12px;color:#9ca4af;line-height:1.5;padding:0 5px}
+.form-grid .ss-control,.field .ss-control,.target-picker .ss-control{width:100%}
+.filters .ss-control{margin-left:0;color:inherit;font-size:inherit;flex:0 1 auto}
+.filters .ss-current-icon,.filters .ss-current-label,.filters .ss-chevron{margin-left:0;color:inherit;font-size:inherit}
+.filters .ss-chevron{margin-left:auto}
+.sub-row .ss-control{flex:1;min-width:0}
+.sub-row .ss-trigger{font-size:16px;padding:8px;gap:5px}
+.sub-row .ss-icon{width:25px;height:25px;min-width:25px;flex-basis:25px;font-size:18px}
+.team-slot .ss-control{width:100%;min-width:0}
+.team-slot .ss-trigger{font-size:17px;padding:8px;gap:6px;grid-column:auto;text-align:left;background:#272b30;border:1px solid #41454d;color:#f3f3f4}
+.team-slot .ss-icon{width:28px;height:28px;min-width:28px;flex-basis:28px}
+.team-slot .ss-icon img{width:100%;height:100%;border-radius:0;background:transparent}
+.detail-heading .ss-icon img{width:100%;height:100%;border-radius:0;background:transparent}
+.actions .ss-control{max-width:460px}
+@media(max-width:1200px){.team-slot .ss-control:has(+button){grid-column:2}.ss-option{font-size:16px}.ss-popup{max-width:calc(100vw - 24px)}}
+@media(max-width:600px){.ss-popup{--ss-meta-width:110px!important}.ss-option{gap:7px;padding:8px 5px}.ss-with-status .ss-option{grid-template-columns:30px minmax(0,1fr) 62px 18px}.ss-with-meta.ss-with-status .ss-option{grid-template-columns:30px minmax(0,1fr) var(--ss-meta-width,110px) 62px 18px}.ss-option-meta{font-size:13px;gap:4px}.ss-option-status{font-size:12px}}

@@ -1,0 +1,18 @@
+'use strict';
+window.PresetUI = ((M) => {
+  const h = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const tiers=M.STANDARD_TIERS.map(t=>({id:'standard-'+t,name:t,description:Number(t[0])+' 影画 · '+(t==='00'?'泛用 S / A 音擎':t[1]+' 星专武')}));
+  function options(state,id,selected) {
+    const c=state.characters.find(x=>x.id===String(id)),info=M.potentialInfo(id);
+    return [...M.presetPlans(state,id)].sort((a,b)=>{const index=id=>{const i=tiers.findIndex(t=>t.id===id);return i<0?99:i;};return index(a.id)-index(b.id);}).map(plan=>{
+      const p=plan.build,meta=`${p.rank} 画 · ${info.available?'P'+p.potential:'潜能未开放'} · ${p.weapon.refine} 星`,status=M.isStandardPlan(plan.id)?'标准 '+plan.id.slice(-2):plan.id==='standard'?'保留方案':'自定义';
+      return `<option value="${h(plan.id)}" data-label="${h(plan.name)}" data-meta="${h(meta)}" data-status="${status}" ${plan.id===(selected||c.activePresetId)?'selected':''}>${h(plan.name+' · '+meta+' · '+status)}</option>`;
+    }).join('');
+  }
+  function detail(state,id,editable) {
+    const c=state.characters.find(x=>x.id===String(id)),plans=M.presetPlans(state,id),active=plans.find(p=>p.id===c.activePresetId),p=c.preset,info=M.potentialInfo(id),rolls=M.presetRollSummary(p,id);
+    const tierCards=tiers.map(t=>{const plan=plans.find(x=>x.id===t.id);if(!plan)return '';const weapon=M.D.weapons[plan.build.weapon.id],gold=window.AccountAdvice.gold([String(id)],{[String(id)]:plan.build});return `<button class="standard-tier ${active.id===t.id?'selected':''}" data-standard-preset="${t.id}" aria-pressed="${active.id===t.id}"><div><b>${t.name}</b><span>${t.description}</span></div><div class="standard-tier-engine"><img src="data/images/weapon-${h(plan.build.weapon.id)}.webp" alt=""><span>${h(weapon?.name||'音擎')}</span></div><small>${gold.limited} 限定金 / ${gold.total} 全部 S 金 · 40 有效副词条</small></button>`;}).join('');
+    return `<section class="panel preset-schemes"><div class="section-head"><h2>${editable?'预设方案':'用于对比的预设方案'}</h2><span class="badge neutral">${plans.length} 个方案 · 独立保存</span></div><div class="standard-tiers" aria-label="九个标准配置档次">${tierCards}</div><div class="preset-picker"><label class="field">选择方案<select id="detail-preset-plan" aria-label="角色预设方案">${options(state,id,c.activePresetId)}</select></label>${editable?`<div class="actions"><button id="preset-add">＋ 新方案</button><button id="preset-copy">复制当前方案</button><button id="preset-delete" ${M.isStandardPlan(active.id)?'disabled':''}>删除方案</button></div>`:''}</div>${editable?`<div class="preset-name"><label for="preset-plan-name">方案名称</label><input id="preset-plan-name" type="text" maxlength="32" value="${h(active.name)}" aria-label="方案名称"><button id="preset-rename">重命名</button></div>`:''}<div class="preset-summary"><span><b>${p.rank}</b> 影画</span><span class="${info.available?'potential-available':'potential-unavailable'}">${info.available?`潜能影像 <b>P${p.potential}</b>`:'潜能影像未开放 · 不可设置'}</span><span>音擎 <b>${p.weapon.refine}</b> 星</span><span id="preset-effective-rolls">有效副词条 <b>${rolls.effective}</b> / 40</span><span id="preset-total-rolls">全部副词条 <b>${rolls.total}</b> 次</span></div><p class="small-note">00 为 0 影画＋1 星泛用 S / A 音擎；其余数字依次表示影画数与专武星级，如 31 是 3 影画＋1 星专武，65 是 6 影画＋5 星专武。每档按角色和音擎属性分别搭配 40 个有效副词条；仅已开放潜能影像的角色默认 P6。新方案从 21 起步，复制保留当前全部配置；旧方案继续独立保存。</p>${active.id==='standard-00'?`<p class="small-note">00 音擎建议：${h(M.standardPolicy(id,'00').generic?.note||'结合队伍与触发条件选择。')} · 标配可编辑，保留你的修改。</p>`:''}${active.originalBuild&&active.originalBuild.potential>0&&!info.available?`<div class="warning">原预设曾设置 P${h(active.originalBuild.potential)}，此角色尚未开放潜能影像，计算按 P0。原始配置已保存在此方案的存档记录中。</div>`:''}</section>`;
+  }
+  return {options,detail};
+})(window.AssistantModel);

@@ -1,0 +1,71 @@
+{
+  "name": "zzz-helper",
+  "version": "3.2.2",
+  "description": "绝区零角色资料、账号装备同步与自动队伍增益比较",
+  "author": "ZZZ Helper",
+  "private": true,
+  "main": "src/main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "dev": "node tools/serve.cjs",
+    "test": "node --test tests/*.test.cjs",
+    "test:network": "electron tools/account-network.cjs",
+    "smoke": "electron tools/smoke.cjs",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win portable --x64",
+    "build:mac": "electron-builder --mac --arm64 --x64",
+    "build:mac:arm64": "electron-builder --mac --arm64",
+    "build:mac:x64": "electron-builder --mac --x64",
+    "build:mac:zip": "electron-builder --mac zip --arm64 --x64",
+    "test:ui": "electron tests/select-ui.cjs && electron tests/schemes-ui.cjs && electron tests/team-results-ui.cjs && electron tests/advice-ui.cjs",
+    "test:desktop": "electron tests/desktop-ui.cjs",
+    "test:package": "node tools/test-package.cjs",
+    "clean": "node tools/clean.cjs",
+    "version:next": "node tools/version.cjs next",
+    "version:check": "node tools/version.cjs check",
+    "prebuild": "npm run version:check",
+    "prebuild:win": "npm run version:check",
+    "prebuild:mac": "npm run version:check",
+    "prebuild:mac:arm64": "npm run version:check",
+    "prebuild:mac:x64": "npm run version:check",
+    "prebuild:mac:zip": "npm run version:check",
+    "data:guides": "node tools/compile-guides.cjs && node tools/compile-standard-builds.cjs"
+  },
+  "devDependencies": {
+    "electron": "^42.0.0",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "local.zzz.buffstudio",
+    "productName": "绝区零·助手",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "docs/**/*",
+      "package.json",
+      "!src/data/.cache/**"
+    ],
+    "win": {
+      "target": "portable",
+      "icon": "src/app.ico",
+      "signExecutable": false
+    },
+    "portable": {
+      "artifactName": "ZZZ-Helper-${version}-win-x64.exe"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "src/app.icns",
+      "category": "public.app-category.utilities",
+      "artifactName": "ZZZ-Helper-${version}-mac-${arch}.${ext}",
+      "identity": "-",
+      "hardenedRuntime": false,
+      "notarize": false
+    }
+  },
+  "dependencies": {
+    "qrcode": "^1.5.4"
+  }
+}

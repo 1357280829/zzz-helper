@@ -1,0 +1,47 @@
+name: Windows and macOS
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  desktop:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            build: build:win
+            artifact: windows-x64
+            executable: dist/win-unpacked/绝区零·助手.exe
+          - os: macos-latest
+            build: build:mac:arm64
+            artifact: macos-arm64
+            executable: dist/mac-arm64/绝区零·助手.app/Contents/MacOS/绝区零·助手
+          - os: macos-15-intel
+            build: build:mac:x64
+            artifact: macos-x64
+            executable: dist/mac/绝区零·助手.app/Contents/MacOS/绝区零·助手
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run smoke
+      - run: npm run test:ui
+      - run: npm run test:desktop
+      - run: npm run ${{ matrix.build }} -- --publish never
+      - run: npm run test:package -- "${{ matrix.executable }}"
+      - run: npm run clean
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: |
+            dist/*.exe
+            dist/*.dmg
+          if-no-files-found: error
